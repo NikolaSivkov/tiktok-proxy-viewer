@@ -29,7 +29,7 @@
 <body>
     <h1>TikTok Embed Generator</h1>
     <input type="text" id="tiktokUrl" placeholder="Enter TikTok URL">
-    <button id="previewBtn">Preview TikTok</button>
+    <button id="previewBtn">Paste & Preview TikTok</button>
     <button id="copyUrlBtn">Copy URL</button>
     <div id="embedContainer"></div>
 
@@ -39,7 +39,16 @@
         const copyUrlBtn = document.getElementById('copyUrlBtn');
         const embedContainer = document.getElementById('embedContainer');
 
-        previewBtn.addEventListener('click', () => {
+        previewBtn.addEventListener('click', async () => {
+            try {
+                const clipboardText = await navigator.clipboard.readText();
+                if (clipboardText) {
+                    tiktokUrlInput.value = clipboardText;
+                }
+            } catch (err) {
+                console.error('Failed to read clipboard contents: ', err);
+            }
+
             const url = tiktokUrlInput.value;
             const videoId = extractVideoId(url);
             if (videoId) {
